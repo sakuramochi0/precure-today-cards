@@ -2,3 +2,5 @@
 /.app_credentials
 /.oauth_credentials
 /img
+/.credentials
+/.credentials_for_test
