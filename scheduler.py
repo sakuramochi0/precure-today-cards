@@ -1,73 +1,153 @@
 #!/usr/bin/env python3
-import pickle
 import sys
 import signal
-import pandas as pd
-from datetime import datetime, timedelta
+import yaml
 from os.path import basename
+from datetime import datetime, timedelta
 from apscheduler.scheduler import Scheduler
-from tweet import tweet
 from img_downloader import download_cards
 import generator
+from twython import Twython
 
-db_file = 'cards.csv'
-que_file = 'ques.p'
+db_file = 'cards.yaml'
+que_file = 'ques.yaml'
+cred_file = '.credentials'
 
 sched = Scheduler()
 sched.start()
 
-def tweet(mode='daily'):
+def auth():
+    '''
+    authonticated the account and return twitter class
+    '''
+    # read app credentials
+    with open(cred_file) as f:
+        app_key, app_secret, oauth_token, oauth_secret = \
+                            [x.strip() for x in f]
+    t = Twython(app_key, app_secret, oauth_token, oauth_secret)
+    return t
+
+def get_timeline(user_id='precure_cards'):
+    '''
+    get twitter home timeline of the specific user
+    '''
+    t = auth()
+    print('user_id: ', user_id)
+    timeline = t.statuses.user_timeline(id=user_id)
+
+    for line in timeline[:5]:
+        print('{0[created_at]} {0[user][name]}({0[user][screen_name]}) {0[text]}'.format(line))
+
+def tweet(status='', img_path=None):
+    '''tweet a status text'''
+    t = auth()
+    if img_path:
+        img = open(img_path, 'rb')
+        res = t.update_status_with_media(status=status, media=img)
+    else:
+        res =t.update_status(status=status)
+    return res
+
+def run(mode='daily'):
     '''Read ques, tweet a tweet, and write ques'''
-    with open(que_file, 'rb') as f:
-        ques = pickle.load(f)
-    if len(ques) == 1:
+    with open(que_file) as f:
+        ques = yaml.load(f)
+    if len(ques) == 0:
         generator.make_que(mode)
+        with open(que_file) as f:
+            ques = yaml.load(f)
     que = ques.popleft()
+    print('from ques:', ques)
+    print('pop:', que)
+    with open(que_file, 'w') as q:
+        yaml.dump(ques, q)
 
     status = generator.tweet_generator(*que)
-    if sys.argv[1] == 'test':
-        print('status:', status)
-    else:
-        res = tweet(**status)
-        # update db
-        uploaded_img_url = res['entities']['media'][0]['url']
-        cards = pd.read_csv(db_file)
-        filename = basename(img_path)
-        cards.loc[cards['filename'] == filename, 'uploaded_img_url'] = uploaded_img_url
-        cards.to_csv(db_file, index=False)
+    res = tweet(**status)
+    # update db
+    card_id = que[0]
+    uploaded_img_url = res['entities']['media'][0]['url']
+    with open(db_file) as db:
+        cards = yaml.load(db)
+    cards[card_id]['uploaded_img_url'] = uploaded_img_url
+    with open(db_file, 'w') as db:
+        yaml.dump(cards, db)
     
-    with open(que_file, 'wb') as f:
-        pickle.dump(ques, f)
     sched.print_jobs()
 
 def download():
     '''Try download cards until updated and set weekly tweet'''
-    res = download_cards()
-    res = 0
-    while(res): # when the page is not updated
-        time.sleep(60)
-        res = download_cards()
-    
+    get_new_card = download_cards()
+    if get_new_card:
+        tweet('今日のカードが更新されましたわ！')
+        generator.make_que('weekly')  # set weekly tweet schedule
+        now = datetime.now()
+        for t in range(0, 60, 5):
+            # run('weekly') 12 times every 5 minutes
+            sched.add_date_job(run, now + timedelta(minutes=t, seconds=10), args=['weekly']) 
+            sched.print_jobs()
+
+def clear_uploaded_img_url():
+    '''Clear img_url to re-upload image files.'''
+    with open(db_file) as db:
+        cards = yaml.load(db)
+    for card_id, card in cards.items():
+        cards[card_id]['uploaded_img_url'] = False
+    with open(db_file, 'w') as db:
+        yaml.dump(cards, db)
+        
 def main():
     '''Set daily and weekly schedules.'''
-    # set daily tweet schedule
-    sched.add_cron_job(tweet, hour='9,21', args=['daily'])
-
-    # set download schedule
-    sched.add_cron_job(download, day_of_week='thu')
-    download()
-    
-    # set weekly tweet schedule
-    generator.make_que('weekly')
-    now = datetime.now()
-    for t in range(0, 60, 5):
-        if sys.argv[1] == 'test':
-            sched.add_date_job(tweet, now + timedelta(seconds=t+1), args=['weekly'])
-        else:
-            sched.add_date_job(tweet, now + timedelta(minutes=t, seconds=10), args=['weekly'])
+    if test:
+        for t in range(0, 60, 5):
+            now = datetime.now()
+            sched.add_date_job(run, now + timedelta(seconds=t+10), args=['weekly'])
+    else:
+        # daily tweet schedule
+        sched.add_cron_job(run, hour='9,21', args=['daily'])
+        # new cards check schedule except 9:00 and 21:00
+        sched.add_cron_job(download, minute='0', hour='0-8,10-20,22-23', day_of_week='thu')
+        sched.add_cron_job(download, minute='30', hour='0-7,9-19,20-23', day_of_week='thu')
     sched.print_jobs()
-
-    signal.pause()      # not to let program exit
+    download()
+    signal.pause()  # not to let program exit
         
 if __name__ == '__main__':
-    main()
+    args = sys.argv[1:]
+    if len(args) < 1:
+        print('''\
+Usage:
+  {0} <command> <arguments>
+Example:
+  {0} run                Run scheduler.
+  {0} make_que [weekly]  Make ques.yaml for daily[weekly] tweets.
+  {0} tweet <args>       Tweet <args> text.
+  {0} timeline <args>    Show home timeline.
+  {0} img <img> <args>   Tweet <args> text with <img> image file.'''.format(basename(sys.argv[0])))
+
+    elif args[0] == 'test':
+        test = True
+        cred_file = '.credentials_for_test'
+        args.pop(0)
+
+    if args[0] == 'tweet':
+        tweet(status=args[1:])
+        if args[1] == 'img':
+            tweet(status=args[2:],img_path=args[1])
+    if args[0] == 'timeline':
+        get_timeline()
+    elif args[0] == 'clear':
+        clear_uploaded_img_url()
+    elif args[0] == 'make_que':
+        mode = 'daily'
+        past = 0
+        if len(args) > 2:
+            past = int(args[2])
+        if len(args) > 1:
+            if args[1] == 'weekly':
+                mode = 'weekly'
+            elif args[1] == 'daily':
+                mode = 'daily'
+        generator.make_que(mode, past)
+    elif args[0] == 'run':
+        main()
