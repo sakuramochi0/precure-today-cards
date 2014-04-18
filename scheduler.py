@@ -50,30 +50,38 @@ def tweet(status='', img_path=None):
 
 def run(mode='daily'):
     '''Read ques, tweet a tweet, and write ques'''
-    with open(que_file) as f:
-        ques = yaml.load(f)
+    # read que_file
+    with open(que_file) as q:
+        ques = yaml.load(q)
     if len(ques) == 0:
         generator.make_que(mode)
-        with open(que_file) as f:
-            ques = yaml.load(f)
+        with open(que_file) as q:
+            ques = yaml.load(q)
+        if len(ques) == 0: # on Thursday and yet get new cards
+            generator.make_que(mode, past=1)
+
     que = ques.popleft()
+
+    # tweet
+    status = generator.tweet_generator(*que)
+    res = tweet(**status)
+
+    # update db
+    card_id = que[0]
+    try:
+        with open(db_file) as db:
+            cards = yaml.load(db)
+        cards[card_id]['uploaded_img_url'] = res['entities']['media'][0]['url']
+    except:
+        pass
+    with open(db_file, 'w') as db:
+        yaml.dump(cards, db)
+
+    # update que_file
     print('from ques:', ques)
     print('pop:', que)
     with open(que_file, 'w') as q:
         yaml.dump(ques, q)
-
-    status = generator.tweet_generator(*que)
-    res = tweet(**status)
-    # update db
-    card_id = que[0]
-    uploaded_img_url = res['entities']['media'][0]['url']
-    with open(db_file) as db:
-        cards = yaml.load(db)
-    cards[card_id]['uploaded_img_url'] = uploaded_img_url
-    with open(db_file, 'w') as db:
-        yaml.dump(cards, db)
-    
-    sched.print_jobs()
 
 def download():
     '''Try download cards until updated and set weekly tweet'''
@@ -85,7 +93,8 @@ def download():
         for t in range(0, 60, 5):
             # run('weekly') 12 times every 5 minutes
             sched.add_date_job(run, now + timedelta(minutes=t, seconds=10), args=['weekly']) 
-            sched.print_jobs()
+        sched.print_jobs()
+        signal.pause()  # not to let program exit
 
 def clear_uploaded_img_url():
     '''Clear img_url to re-upload image files.'''
@@ -96,45 +105,46 @@ def clear_uploaded_img_url():
     with open(db_file, 'w') as db:
         yaml.dump(cards, db)
         
-def main():
+def set_schedule():
     '''Set daily and weekly schedules.'''
     if test:
-        for t in range(0, 60, 5):
+        for t in range(0, 6):
             now = datetime.now()
-            sched.add_date_job(run, now + timedelta(seconds=t+10), args=['weekly'])
-    else:
-        # daily tweet schedule
-        sched.add_cron_job(run, hour='9,21', args=['daily'])
-        # new cards check schedule except 9:00 and 21:00
-        sched.add_cron_job(download, minute='0', hour='0-8,10-20,22-23', day_of_week='thu')
-        sched.add_cron_job(download, minute='30', hour='0-7,9-19,20-23', day_of_week='thu')
+            sched.add_date_job(run, now + timedelta(seconds=t*5+10), args=['daily'])
+    if quick:
+        for t in range(12):
+            now = datetime.now()
+            sched.add_date_job(run, now + timedelta(seconds=t*10+10), args=['weekly'])
     sched.print_jobs()
-    download()
     signal.pause()  # not to let program exit
         
 if __name__ == '__main__':
+    test = False
+    quick = False
     args = sys.argv[1:]
     if len(args) < 1:
         print('''\
 Usage:
   {0} <command> <arguments>
 Example:
-  {0} run                Run scheduler.
+  {0} run                Run que tweet.
+  {0} set_schedule       Run scheduler.
   {0} make_que [weekly]  Make ques.yaml for daily[weekly] tweets.
   {0} tweet <args>       Tweet <args> text.
   {0} timeline <args>    Show home timeline.
   {0} img <img> <args>   Tweet <args> text with <img> image file.'''.format(basename(sys.argv[0])))
-
     elif args[0] == 'test':
         test = True
         cred_file = '.credentials_for_test'
         args.pop(0)
-
+    elif args[0] == 'quick':
+        quick = True
+        args.pop(0)
     if args[0] == 'tweet':
         tweet(status=args[1:])
         if args[1] == 'img':
             tweet(status=args[2:],img_path=args[1])
-    if args[0] == 'timeline':
+    elif args[0] == 'timeline':
         get_timeline()
     elif args[0] == 'clear':
         clear_uploaded_img_url()
@@ -149,5 +159,9 @@ Example:
             elif args[1] == 'daily':
                 mode = 'daily'
         generator.make_que(mode, past)
+    elif args[0] == 'set_schedule':
+        set_schedule()
+    elif args[0] == 'download':
+        download()
     elif args[0] == 'run':
-        main()
+        run()
