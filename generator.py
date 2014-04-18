@@ -26,14 +26,14 @@ def tweet_generator(card_id, past, num):
     else:
         week = '{}週間前'.format(past)
 
-    if 'comment' in card.keys():
-        status = '{0}の{1}枚目の画像は、{2}の{3}ですわ！ {4}「{5}」'.format(
+    if 'comment' in card.keys() and card['comment']:
+        status = '{0}の{1}枚目の画像は、{2}の{3}ですわ！\n{4}「{5}」'.format(
             week, num, card['chara_name'], card['card_name'], card['comment_name'], card['comment'])
     else:
         status = '{0}の{1}枚目の画像は、こちらのカードですわ！'.format(week, num)
 
-    uploaded_img_url = card['uploaded_img_url']
-    if uploaded_img_url:
+    if 'uploaded_img_url' in card.keys() and card['uploaded_img_url']:
+        uploaded_img_url = cards[card_id]['uploaded_img_url']
         status += ' ' + uploaded_img_url
         return {'status': status}
     else:
