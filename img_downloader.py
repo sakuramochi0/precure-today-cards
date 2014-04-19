@@ -32,14 +32,11 @@ def download_cards():
             print('- over 100 retry, exit')
             break
             
-        print('fetching card #', len(downloaded_list) + 1)
-
         # get html
         url_prefix = 'http://precure-live.com/allstars/'
         page_url = url_prefix + 'precure-card/today-card.html'
         headers = {'referer': url_prefix + 'index.html'}
         r = requests.get(page_url, headers=headers)
-        print('- fetch html')
 
         # parse html & get img_url
         p = re.compile(r'image/precure-card/[^/]+/([^/]+)/([^"]+)')
@@ -47,7 +44,6 @@ def download_cards():
         update_num = match.group(1)
         img_url = url_prefix + match.group()
         filename = match.group(2)
-        print('- fetch image:\n    ', img_url)
 
         # cf. filename: 'img_card_happiness01-68_e8d7824dxjm3.jpg'
         p = re.compile(r'img_card_(.+)(\d{2,})-(\d{2,})_(.+).jpg')
@@ -56,22 +52,13 @@ def download_cards():
         series_num = int(match.group(2))
         card_num = int(match.group(3))
 
-        # debug
-        print('- parse filename:')
-        print('    series:', series)
-        print('    series_num:', series_num)
-        print('    card_num:', card_num)
-
         # prevent duplicated download
         if filename in exist_filenames:
-            print('-' * 8)
-            print('This weeks cards has already been downloaded.')
             return False # not get new cards
         
         # check if the card is new or not
         if not card_num in downloaded_list:
-            print('-' * 8)
-            print('- get a new card')
+            print('- get a new card #', len(downloaded_list) + 1)
             # get img
             r_img = requests.get(img_url, headers=headers)
             i = Image.open(io.BytesIO(r_img.content))
@@ -94,11 +81,10 @@ def download_cards():
             cards[id] = new_card
             with open('cards.yaml', 'w') as f:
                 yaml.dump(cards, f)
-            print('-' * 8)
             print('Append a record to the database:', card_num)
+            print('-' * 8)
                             
         # safe access
-        print('-' * 8)
         time.sleep(1)
 
     return True  # get new cards
