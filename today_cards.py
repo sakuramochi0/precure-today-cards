@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import sys
-import signal
-import yaml
 from os.path import basename
 from datetime import datetime, timedelta
+import signal
 from apscheduler.scheduler import Scheduler
+import yaml
+from twython import Twython
 from img_downloader import download_cards
 import generator
-from twython import Twython
 
 db_file = 'cards.yaml'
 que_file = 'ques.yaml'
@@ -89,10 +89,10 @@ def download():
     if get_new_card:
         tweet('今日のカードが更新されましたわ！')
         generator.make_que('weekly')  # set weekly tweet schedule
-        now = datetime.now()
-        for t in range(0, 60, 5):
+        now = datetime.now() + timedelta(seconds=10)
+        for t in range(12):
             # run('weekly') 12 times every 5 minutes
-            sched.add_date_job(run, now + timedelta(minutes=t, seconds=10), args=['weekly']) 
+            sched.add_date_job(run, now + timedelta(minutes=t), args=['weekly']) 
         sched.print_jobs()
         signal.pause()  # not to let program exit
 
@@ -108,19 +108,26 @@ def clear_uploaded_img_url():
 def set_schedule():
     '''Set daily and weekly schedules.'''
     if test:
-        for t in range(0, 6):
+        chara_card_num = 6      # sometimes become 6
+        for t in range(chara_card_num):
             now = datetime.now()
             sched.add_date_job(run, now + timedelta(seconds=t*5+10), args=['daily'])
     if quick:
         for t in range(12):
             now = datetime.now()
             sched.add_date_job(run, now + timedelta(seconds=t*10+10), args=['weekly'])
+    if weekly:
+        for t in range(11):
+            now = datetime.now()
+            # run('weekly') 12 times every 5 minutes
+            sched.add_date_job(run, now + timedelta(minutes=t*5, seconds=10), args=['weekly']) 
     sched.print_jobs()
     signal.pause()  # not to let program exit
         
 if __name__ == '__main__':
     test = False
     quick = False
+    weekly = False
     args = sys.argv[1:]
     if len(args) < 1:
         print('''\
@@ -129,6 +136,7 @@ Usage:
 Example:
   {0} run                Run que tweet.
   {0} set_schedule       Run scheduler.
+  {0} clear		 Crear all the img_url from database.
   {0} make_que [weekly]  Make ques.yaml for daily[weekly] tweets.
   {0} tweet <args>       Tweet <args> text.
   {0} timeline <args>    Show home timeline.
@@ -139,6 +147,9 @@ Example:
         args.pop(0)
     elif args[0] == 'quick':
         quick = True
+        args.pop(0)
+    elif args[0] == 'weekly':
+        weekly = True
         args.pop(0)
     if args[0] == 'tweet':
         tweet(status=args[1:])
