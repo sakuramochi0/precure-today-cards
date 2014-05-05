@@ -49,7 +49,7 @@ def make_que(mode='daily', past=0):
     cards = list((id, v) for id, v in cards.items() if v['date'] in dates) # limit to cards in dates
     cards = sorted(cards, key=lambda x: x[1]['card_num']) # sort by card_num
     if mode == 'daily':
-        cards = cards[:4] # character cards only
+        cards = cards[:6] # character cards only
     
     # make que
     ques = deque([])
