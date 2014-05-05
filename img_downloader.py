@@ -9,10 +9,21 @@ import datetime
 
 img_dir = 'img/'
 db_file = 'cards.yaml'
+url_list_file = 'url-list.txt'
 
 url_prefix = 'http://precure-live.com/allstars/'
 page_url = url_prefix + 'precure-card/today-card.html'
 headers = {'referer': url_prefix + 'index.html'}
+
+def generate_url_list():
+    with open(db_file) as f:
+        cards = yaml.load(f)
+    urls = []
+    for id, card in cards.items():
+        urls.append(card['img_url'])
+    urls.sort()
+    with open(url_list_file, 'w') as f:
+        f.write('\n'.join(urls))
 
 def download_cards():
     '''download all card image of the week'''
@@ -86,6 +97,7 @@ def download_cards():
         # safe access
         time.sleep(1)
 
+    generate_url_list()
     return True  # get new cards
 
 def redownload():
