@@ -4,13 +4,15 @@ import yaml
 import requests
 import re
 import sys
-import io
 import time
 import datetime
-from PIL import Image
 
 img_dir = 'img/'
 db_file = 'cards.yaml'
+
+url_prefix = 'http://precure-live.com/allstars/'
+page_url = url_prefix + 'precure-card/today-card.html'
+headers = {'referer': url_prefix + 'index.html'}
 
 def download_cards():
     '''download all card image of the week'''
@@ -33,9 +35,6 @@ def download_cards():
             break
             
         # get html
-        url_prefix = 'http://precure-live.com/allstars/'
-        page_url = url_prefix + 'precure-card/today-card.html'
-        headers = {'referer': url_prefix + 'index.html'}
         r = requests.get(page_url, headers=headers)
 
         # parse html & get img_url
@@ -61,8 +60,8 @@ def download_cards():
             print('- get a new card #', len(downloaded_list) + 1)
             # get img
             r_img = requests.get(img_url, headers=headers)
-            i = Image.open(io.BytesIO(r_img.content))
-            i.save(img_dir + filename)
+            with open(img_dir + filename, 'wb') as f:
+                f.write(r_img.content)
             print('- save image:', filename)
             
             downloaded_list.append(card_num)
@@ -79,7 +78,7 @@ def download_cards():
 
             id = '{}-{}-{}'.format(series, series_num, card_num)
             cards[id] = new_card
-            with open('cards.yaml', 'w') as f:
+            with open(db_file, 'w') as f:
                 yaml.dump(cards, f)
             print('Append a record to the database:', card_num)
             print('-' * 8)
@@ -89,7 +88,22 @@ def download_cards():
 
     return True  # get new cards
 
+def redownload():
+    '''re-download all the images'''
+    with open(db_file) as db:
+        cards = yaml.load(db)
+    for (id, card) in cards.items():
+        img_url = card['img_url']
+        filename = card['filename']
+        r = requests.get(img_url, headers=headers)
+        with open(img_dir + filename, 'wb') as f:
+            f.write(r.content)
+        print('Write image:', filename)
+    
 if __name__ == '__main__':
-    if len(sys.argv) == 2 and sys.argv[1] == 'test':
-        db_file = 'test.csv'
+    if len(sys.argv) == 2:
+        if sys.argv[1] == 'test':
+            db_file = 'test.csv'
+        elif sys.argv[1] == 'redownload':
+            redownload()
     download_cards()
