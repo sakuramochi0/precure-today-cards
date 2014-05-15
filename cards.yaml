@@ -444,12 +444,45 @@ hapiness-2-48: {card_name: '', card_num: 48, chara_name: "\u30EA\u30DC\u30F3", c
   comment_name: '', date: '2014-05-08', filename: img_card_hapiness02-48_tten3dnhixad.jpg,
   img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/04/img_card_hapiness02-48_tten3dnhixad.jpg',
   series: hapiness, series_num: 2, update_num: '04', uploaded_img_url: 'http://t.co/pfYaZePiZ6'}
+hapiness-2-49: {card_num: 49, date: '2014-05-15', filename: img_card_hapiness02-49_s52e5s4zcre6.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-49_s52e5s4zcre6.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/GUZiPabqcS'}
 hapiness-2-5: {card_name: "\u30B9\u30D7\u30EA\u30F3\u30B0\u30AC\u30FC\u30C7\u30F3\u30B3\
     \u30FC\u30C7", card_num: 5, chara_name: "\u3072\u3073\u304D\u3068\u3044\u3064\u304D",
   comment: "\u306F\u308B\u306B\u3074\u3063\u305F\u308A\u306E\u30B3\u30EB\u30BB\u30C3\
     \u30C8\u30B7\u30E3\u30C4\u3060\u306D\u266A", comment_name: "\u3072\u3073\u304D",
   date: '2014-04-17', filename: img_card_hapiness02-05_5p68nbp4ihpr.jpg, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/01/img_card_hapiness02-05_5p68nbp4ihpr.jpg',
   series: hapiness, series_num: 2, update_num: '01', uploaded_img_url: 'http://t.co/QnoX6bUu1t'}
+hapiness-2-50: {card_num: 50, date: '2014-05-15', filename: img_card_hapiness02-50_jds66dnuznhj.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-50_jds66dnuznhj.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/l3U3UTfxh1'}
+hapiness-2-51: {card_num: 51, date: '2014-05-15', filename: img_card_hapiness02-51_9msn6ud9735t.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-51_9msn6ud9735t.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/7ZUkFxBqUg'}
+hapiness-2-52: {card_num: 52, date: '2014-05-15', filename: img_card_hapiness02-52_ndk34aswizic.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-52_ndk34aswizic.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/N3P17EKbsx'}
+hapiness-2-53: {card_num: 53, date: '2014-05-15', filename: img_card_hapiness02-53_caimbwkmbasz.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-53_caimbwkmbasz.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/DhvV4apCjZ'}
+hapiness-2-54: {card_num: 54, date: '2014-05-15', filename: img_card_hapiness02-54_ssm626c83frf.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-54_ssm626c83frf.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/OgcY8XH9ND'}
+hapiness-2-55: {card_num: 55, date: '2014-05-15', filename: img_card_hapiness02-55_g9kt5a9m3bt9.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-55_g9kt5a9m3bt9.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/plAPVvMfuh'}
+hapiness-2-56: {card_num: 56, date: '2014-05-15', filename: img_card_hapiness02-56_zdz83cp4im2h.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-56_zdz83cp4im2h.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/Ii4Mqe7VON'}
+hapiness-2-57: {card_num: 57, date: '2014-05-15', filename: img_card_hapiness02-57_htijgwugwh9k.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-57_htijgwugwh9k.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/WdaZSl1jie'}
+hapiness-2-58: {card_num: 58, date: '2014-05-15', filename: img_card_hapiness02-58_hfe2funuxyw4.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-58_hfe2funuxyw4.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/TAE5WDwTeI'}
+hapiness-2-59: {card_num: 59, date: '2014-05-15', filename: img_card_hapiness02-59_m8wdss2j94ng.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-59_m8wdss2j94ng.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/QFOj2vbXY3'}
 hapiness-2-6: {card_name: "\u30B9\u30D7\u30EA\u30F3\u30B0\u30AC\u30FC\u30C7\u30F3\u30B3\
     \u30FC\u30C7", card_num: 6, chara_name: "\u304A\u304A\u3082\u308A \u3086\u3046\
     \u3053", comment: "\u30D1\u30B9\u30C6\u30EB\u30AB\u30E9\u30FC\u304C\u304D\u308C\
@@ -457,6 +490,9 @@ hapiness-2-6: {card_name: "\u30B9\u30D7\u30EA\u30F3\u30B0\u30AC\u30FC\u30C7\u30F
   comment_name: "\u3086\u3046\u3053", date: '2014-04-17', filename: img_card_hapiness02-06_b6zk7g3jbaaa.jpg,
   img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/01/img_card_hapiness02-06_b6zk7g3jbaaa.jpg',
   series: hapiness, series_num: 2, update_num: '01', uploaded_img_url: 'http://t.co/LYDjHQy67J'}
+hapiness-2-60: {card_num: 60, date: '2014-05-15', filename: img_card_hapiness02-60_ksuywgnra5g2.jpg,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/05/img_card_hapiness02-60_ksuywgnra5g2.jpg',
+  series: hapiness, series_num: 2, update_num: '05', uploaded_img_url: 'http://t.co/EZKEf9gUwL'}
 hapiness-2-7: {card_name: '', card_num: 7, chara_name: "\u30EA\u30DC\u30F3", comment: '',
   comment_name: '', date: '2014-04-17', filename: img_card_hapiness02-07_psgrdaj2sibc.jpg,
   img_url: 'http://precure-live.com/allstars/image/precure-card/happiness02/01/img_card_hapiness02-07_psgrdaj2sibc.jpg',
