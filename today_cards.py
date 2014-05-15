@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 import sys
+import signal
+import yaml
+import re
+import subprocess
 from os.path import basename
 from datetime import datetime, timedelta
-import signal
 from apscheduler.scheduler import Scheduler
-import yaml
+import requests
+from bs4 import BeautifulSoup
 from twython import Twython
 from img_downloader import download_cards
 import generator
@@ -12,6 +16,7 @@ import generator
 db_file = 'cards.yaml'
 que_file = 'ques.yaml'
 cred_file = '.credentials'
+news_file = 'news.txt'
 
 sched = Scheduler()
 sched.start()
@@ -88,6 +93,7 @@ def download():
     get_new_card = download_cards()
     if get_new_card:
         tweet('今日のカードが更新されましたわ！')
+        subprocess.call(['./input_description.py'])
         generator.make_que('weekly')  # set weekly tweet schedule
         now = datetime.now() + timedelta(seconds=10)
         for t in range(12):
@@ -123,7 +129,63 @@ def set_schedule():
             sched.add_date_job(run, now + timedelta(minutes=t*5, seconds=10), args=['weekly']) 
     sched.print_jobs()
     signal.pause()  # not to let program exit
-        
+
+def get_title(url):
+    '''get the first part of the page title from the url'''
+    r = requests.get(url)
+    r.encoding = 'utf-8'
+    soup = BeautifulSoup(r.text)
+    title = soup.title.text.strip()
+    match = re.search(r'(.+) - ', title)
+    if match:
+        title = match.group(1)
+    else:
+        title = re.search(r'(.+) : ', title).group(1)
+    return title
+    
+def check_update():
+    '''check DCD news and tweet the information'''
+    url_base = 'http://precure-live.com'
+    r = requests.get('http://precure-live.com/allstars/')
+    r.encoding = 'utf-8'
+    soup = BeautifulSoup(r.text)
+    # extract only new news items
+    news = soup(id='precure-news')[0].span.findParent().findNextSiblings()
+    new_news = ''
+    for i in news:
+        if i.has_attr('class'):
+            break
+        new_news += str(i)
+    news = BeautifulSoup(''.join(new_news))
+    news = news('a', class_=re.compile(r'^news.*'))
+    with open(news_file) as f:
+        last_news = f.read().split('\n')
+    if not str(news[0]) in last_news:
+        for i in news:
+            cls = i['class'][0]
+            if cls == 'news-news':
+                category = 'ニュース'
+                if i.text == 'カードカタログ':
+                    continue
+            elif cls == 'news-event':
+                category = 'イベント'
+            elif cls == 'news-goods':
+                category = 'グッズ'
+            elif cls == 'news-cardlist':
+                category = 'カードリスト'
+            elif cls == 'news-about':
+                category = 'あそびかた'
+            else:
+                continue
+            url = url_base + i.get('href')
+            title = get_title(url)
+            #print('{category}のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
+            tweet('{category}のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
+        # write new news list
+        with open(news_file, 'w') as f:
+            for i in news:
+                f.write(str(i) + '\n')
+
 if __name__ == '__main__':
     test = False
     quick = False
@@ -174,5 +236,7 @@ Example:
         set_schedule()
     elif args[0] == 'download':
         download()
+    elif args[0] == 'check_update':
+        check_update()
     elif args[0] == 'run':
         run()
