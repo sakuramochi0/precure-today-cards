@@ -6,6 +6,7 @@ import re
 import sys
 import time
 import datetime
+import subprocess
 
 img_dir = 'img/'
 db_file = 'cards.yaml'
@@ -24,6 +25,10 @@ def generate_url_list():
     urls.sort()
     with open(url_list_file, 'w') as f:
         f.write('\n'.join(urls))
+    # update repo
+    subprocess.call(['git', 'add', url_list_file])
+    subprocess.call(['git', 'commit', '-m', 'update url-list.txt'])
+    subprocess.call(['git', 'push'])
 
 def download_cards():
     '''download all card image of the week'''
