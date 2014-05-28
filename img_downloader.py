@@ -7,6 +7,8 @@ import sys
 import time
 import datetime
 import subprocess
+from io import BytesIO
+from PIL import Image
 
 img_dir = 'img/'
 db_file = 'cards.yaml'
@@ -41,7 +43,7 @@ def download_cards():
         cards = yaml.load(db)
     exist_filenames = []
     for card in cards.values():
-        exist_filenames.append(card['filename'])
+        exist_filenames.append(card['filename'][:-3] + 'jpg')
         
     # download all the card
     while len(downloaded_list) < max_card_num:
@@ -76,9 +78,13 @@ def download_cards():
             print('- get a new card #', len(downloaded_list) + 1)
             # get img
             r_img = requests.get(img_url, headers=headers)
-            with open(img_dir + filename, 'wb') as f:
+            with open(img_dir + 'jpg/' + filename, 'wb') as f:
                 f.write(r_img.content)
-            print('- save image:', filename)
+            print('- save jpeg image:', filename)
+
+            # convert png image
+            img = Image.open(BytesIO(r_img.content))
+            img.save(img_dir + filename[:-3] + 'png')
             
             downloaded_list.append(card_num)
             print('- add downloaded_list:', card_num)
@@ -88,7 +94,7 @@ def download_cards():
                         'series': series,
                         'series_num': series_num,
                         'card_num': card_num,
-                        'filename': filename,
+                        'filename': filename[:-3] + 'png',
                         'img_url': img_url,
                         'update_num': update_num}
 
