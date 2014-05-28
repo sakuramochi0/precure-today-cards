@@ -16,7 +16,7 @@ import generator
 db_file = 'cards.yaml'
 que_file = 'ques.yaml'
 cred_file = '.credentials'
-news_file = 'news.txt'
+last_news_file = 'last_news.txt'
 
 sched = Scheduler()
 sched.start()
@@ -70,6 +70,10 @@ def run(mode='daily'):
     # tweet
     status = generator.tweet_generator(*que)
     res = tweet(**status)
+    with open(db_file) as f:
+        cards = yaml.load(f)
+    print('Tweet this card:', cards[que[0]])
+    print('Remained ques:', ques)
 
     # update db
     card_id = que[0]
@@ -83,8 +87,6 @@ def run(mode='daily'):
         yaml.dump(cards, db)
 
     # update que_file
-    print('from ques:', ques)
-    print('pop:', que)
     with open(que_file, 'w') as q:
         yaml.dump(ques, q)
 
@@ -93,13 +95,13 @@ def download():
     get_new_card = download_cards()
     if get_new_card:
         tweet('今日のカードが更新されましたわ！')
-        subprocess.call(['./input_description.py'])
         generator.make_que('weekly')  # set weekly tweet schedule
         now = datetime.now() + timedelta(seconds=10)
         for t in range(12):
             # run('weekly') 12 times every 5 minutes
             sched.add_date_job(run, now + timedelta(minutes=t), args=['weekly']) 
         sched.print_jobs()
+        subprocess.call(['./input_description.py'])
         signal.pause()  # not to let program exit
 
 def clear_uploaded_img_url():
@@ -158,10 +160,12 @@ def check_update():
         new_news += str(i)
     news = BeautifulSoup(''.join(new_news))
     news = news('a', class_=re.compile(r'^news.*'))
-    with open(news_file) as f:
+    with open(last_news_file) as f:
         last_news = f.read().split('\n')
-    if not str(news[0]) in last_news:
-        for i in news:
+    new = False
+    for i in news:
+        if not str(i) in last_news:
+            new = True
             cls = i['class'][0]
             if cls == 'news-news':
                 category = 'ニュース'
@@ -176,33 +180,39 @@ def check_update():
             elif cls == 'news-about':
                 category = 'あそびかた'
             else:
-                continue
+                continue # not hit known update category
             url = url_base + i.get('href')
             title = get_title(url)
-            #print('{category}のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
-            tweet('{category}のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
-        # write new news list
-        with open(news_file, 'w') as f:
+            print('プリキュアDCDの「{category}」のページが更新されましたわ！ | {title} - {url}'.format(category=category, title=title, url=url))
+            tweet('プリキュアDCDの「{category}」のページが更新されましたわ！ | {title} - {url}'.format(category=category, title=title, url=url))
+
+    if new: # write new last news list
+        with open(last_news_file, 'w') as f:
             for i in news:
                 f.write(str(i) + '\n')
 
 if __name__ == '__main__':
+    
+    docs = '''\
+Usage:
+  {0} [test] [quick] <command> <arguments>
+command:
+  run                     Run que tweet.
+  set_schedule            Run scheduler.
+  clear		          Crear all the uploaded_img_url from database.
+  make_que [weekly]       Make ques.yaml for daily[weekly] tweets.
+  tweet <args>            Tweet <args> text.
+  timeline <args>         Show home timeline.
+  img <img> <args>        Tweet <args> text with <img> image file.
+  check_update            Check website update.'''.format(basename(sys.argv[0]))
+    
     test = False
     quick = False
     weekly = False
     args = sys.argv[1:]
     if len(args) < 1:
-        print('''\
-Usage:
-  {0} <command> <arguments>
-Example:
-  {0} run                Run que tweet.
-  {0} set_schedule       Run scheduler.
-  {0} clear		 Crear all the img_url from database.
-  {0} make_que [weekly]  Make ques.yaml for daily[weekly] tweets.
-  {0} tweet <args>       Tweet <args> text.
-  {0} timeline <args>    Show home timeline.
-  {0} img <img> <args>   Tweet <args> text with <img> image file.'''.format(basename(sys.argv[0])))
+        print(docs)
+        exit()
     elif args[0] == 'test':
         test = True
         cred_file = '.credentials_for_test'
@@ -213,7 +223,10 @@ Example:
     elif args[0] == 'weekly':
         weekly = True
         args.pop(0)
-    if args[0] == 'tweet':
+
+    if len(args) < 1:
+        print(docs)
+    elif args[0] == 'tweet':
         tweet(status=args[1:])
         if args[1] == 'img':
             tweet(status=args[2:],img_path=args[1])
