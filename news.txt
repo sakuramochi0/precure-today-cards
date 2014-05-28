@@ -1,2 +1,0 @@
-<a class="news-card" href="javascript:void(0)" onclick="openCard();return false;">今日のカード</a>
-<a class="news-news" href="/allstars/news/199.html">ニュース</a>
