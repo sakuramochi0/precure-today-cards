@@ -4,19 +4,22 @@ import signal
 import yaml
 import re
 import subprocess
+import time
 from os.path import basename
 from datetime import datetime, timedelta
 from apscheduler.scheduler import Scheduler
+
 import requests
 from bs4 import BeautifulSoup
 from twython import Twython
+from twython import TwythonError
 from img_downloader import download_cards
 import generator
 
-db_file = 'cards.yaml'
-que_file = 'ques.yaml'
+db_file = 'cards.yml'
+que_file = 'ques.yml'
 cred_file = '.credentials'
-last_news_file = 'last_news.txt'
+last_date_file = 'last_date.txt'
 
 sched = Scheduler()
 sched.start()
@@ -84,11 +87,11 @@ def run(mode='daily'):
     except:
         pass
     with open(db_file, 'w') as db:
-        yaml.dump(cards, db)
+        yaml.dump(cards, db, allow_unicode=True)
 
     # update que_file
     with open(que_file, 'w') as q:
-        yaml.dump(ques, q)
+        yaml.dump(ques, q, allow_unicode=True)
 
 def download():
     '''Try download cards until updated and set weekly tweet'''
@@ -96,13 +99,13 @@ def download():
     if get_new_card:
         tweet('今日のカードが更新されましたわ！')
         generator.make_que('weekly')  # set weekly tweet schedule
-        now = datetime.now() + timedelta(seconds=10)
+        now = datetime.now() + timedelta(minutes=10)
         for t in range(12):
             # run('weekly') 12 times every 5 minutes
             sched.add_date_job(run, now + timedelta(minutes=t), args=['weekly']) 
         sched.print_jobs()
         subprocess.call(['./input_description.py'])
-        signal.pause()  # not to let program exit
+        time.sleep(60 * 60) # sleep 1hour
 
 def clear_uploaded_img_url():
     '''Clear img_url to re-upload image files.'''
@@ -111,7 +114,7 @@ def clear_uploaded_img_url():
     for card_id, card in cards.items():
         cards[card_id]['uploaded_img_url'] = False
     with open(db_file, 'w') as db:
-        yaml.dump(cards, db)
+        yaml.dump(cards, db, allow_unicode=True)
         
 def set_schedule():
     '''Set daily and weekly schedules.'''
@@ -144,6 +147,14 @@ def get_title(url):
     else:
         title = re.search(r'(.+) : ', title).group(1)
     return title
+
+def get_img_alt(url):
+    '''Get the alt text of the first img.'''
+    r = requests.get(url)
+    r.encoding = 'utf-8'
+    soup = BeautifulSoup(r.text)
+    texts = [img['alt'] for img in soup(id='column-right')[0]('img') if img['alt']]
+    return texts[0]
     
 def check_update():
     '''check DCD news and tweet the information'''
@@ -151,21 +162,23 @@ def check_update():
     r = requests.get('http://precure-live.com/allstars/')
     r.encoding = 'utf-8'
     soup = BeautifulSoup(r.text)
+
     # extract only new news items
-    news = soup(id='precure-news')[0].span.findParent().findNextSiblings()
+    news = soup(id='precure-news')[0].span.find_parent().find_next_siblings()
     new_news = ''
     for i in news:
         if i.has_attr('class'):
             break
         new_news += str(i)
     news = BeautifulSoup(''.join(new_news))
-    news = news('a', class_=re.compile(r'^news.*'))
-    with open(last_news_file) as f:
-        last_news = f.read().split('\n')
-    new = False
-    for i in news:
-        if not str(i) in last_news:
-            new = True
+    news = set(news('a', class_=re.compile(r'^news.*')))
+
+    # date check
+    with open(last_date_file) as f:
+        last_date = f.read().strip()
+    new_date = [x for x in soup(id='precure-news')[0]('dt') if x.span][0].next
+    if new_date != last_date:
+        for i in news:
             cls = i['class'][0]
             if cls == 'news-news':
                 category = 'ニュース'
@@ -183,13 +196,18 @@ def check_update():
                 continue # not hit known update category
             url = url_base + i.get('href')
             title = get_title(url)
-            print('プリキュアDCDの「{category}」のページが更新されましたわ！ | {title} - {url}'.format(category=category, title=title, url=url))
-            tweet('プリキュアDCDの「{category}」のページが更新されましたわ！ | {title} - {url}'.format(category=category, title=title, url=url))
+            if category == 'ニュース':
+                text = get_img_alt(url)
+                if text:
+                    title += ' ' + text
+            print('「{category}」のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
+            try:
+                tweet('「{category}」のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
+            except TwythonError as e:
+                print(e)
 
-    if new: # write new last news list
-        with open(last_news_file, 'w') as f:
-            for i in news:
-                f.write(str(i) + '\n')
+        with open(last_date_file, 'w') as f:
+            f.write(new_date)
 
 if __name__ == '__main__':
     
