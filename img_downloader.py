@@ -11,7 +11,7 @@ from io import BytesIO
 from PIL import Image
 
 img_dir = 'img/'
-db_file = 'cards.yaml'
+db_file = 'cards.yml'
 url_list_file = 'url-list.txt'
 
 url_prefix = 'http://precure-live.com/allstars/'
@@ -101,7 +101,7 @@ def download_cards():
             id = '{}-{}-{}'.format(series, series_num, card_num)
             cards[id] = new_card
             with open(db_file, 'w') as f:
-                yaml.dump(cards, f)
+                yaml.dump(cards, f, allow_unicode=True)
             print('Append a record to the database:', card_num)
             print('-' * 8)
                             

@@ -4,8 +4,8 @@ from datetime import date, timedelta
 from collections import deque
 import yaml
 
-db_file = 'cards.yaml'
-que_file = 'ques.yaml'
+db_file = 'cards.yml'
+que_file = 'ques.yml'
 img_dir = 'img/'
 
 def read_file(file):
@@ -41,8 +41,10 @@ def tweet_generator(card_id, past, num):
         return {'status': status, 'img_path': img_path}
             
 def make_que(mode='daily', past=0):
-    '''Make tweet que accorfing to mode (weekly/daily).
-    If 'past' is given, return a list 'past' weeks ago.'''
+    '''
+    Make tweet que according to mode (weekly/daily).
+    If 'past' is given, return a list 'past' weeks ago.
+    '''
     # read db and limit cards to in this week
     cards = read_file(db_file)
     dates = make_list_of_the_week(past)

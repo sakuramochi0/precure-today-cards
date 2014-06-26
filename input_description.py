@@ -5,7 +5,7 @@ import yaml
 import easygui as eg
 
 img_dir = 'img/'
-db_file = 'cards.yaml'
+db_file = 'cards.yml'
 
 with open(db_file) as db:
     cards = yaml.load(db)
@@ -30,4 +30,4 @@ for id, card in cs.items():
         cards[id]['comment'] = comment
         print('write: {}'.format(field_values[:]))
         with open(db_file, 'w') as db:
-            yaml.dump(cards, db)
+            yaml.dump(cards, db, allow_unicode=True)
