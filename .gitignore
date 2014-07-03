@@ -4,4 +4,7 @@
 /.credentials_for_test
 /#*
 *.log
-*flymake*
+*flymake*html
+img
+ques.yml
+last_date.txt
