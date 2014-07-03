@@ -104,7 +104,6 @@ def download():
             # run('weekly') 12 times every 5 minutes
             sched.add_date_job(run, now + timedelta(minutes=t), args=['weekly']) 
         sched.print_jobs()
-        subprocess.call(['./input_description.py'])
         time.sleep(60 * 60) # sleep 1hour
 
 def clear_uploaded_img_url():
