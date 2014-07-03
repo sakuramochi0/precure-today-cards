@@ -17,10 +17,10 @@ def sort_name(items):
     return filename
 
 thumbs = []
-for num, filename in sorted(filenames.items(), key=sort_name):
-    thumbs.append('<div class="box"><a href="jpg/{0}" rel="imgs"><img src="/img/1x1.png" data-original="jpg/{0}" class="lazy"></a></div>'.format(filename))
+for num, filename in reversed(sorted(filenames.items(), key=sort_name)):
+    thumbs.append('<div class="box"><a href="img/jpg/{0}" rel="imgs"><img src="/img/1x1.png" data-original="img/jpg/{0}" class="lazy"></a></div>'.format(filename))
 
-html = template.format(thumbs='\n\n'.join(thumbs))
+html = template.format(thumbs='\n'.join(thumbs))
     
-with open(path.expanduser('~/www/precure/dcd-today-cards/index.html'), 'w') as f:
+with open('html/index.html', 'w') as f:
     f.write(html)
