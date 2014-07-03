@@ -29,7 +29,7 @@ def generate_url_list():
         f.write('\n'.join(urls))
     # update repo
     subprocess.call(['git', 'add', url_list_file])
-    subprocess.call(['git', 'commit', '-m', 'update url-list.txt'])
+    subprocess.call(['git', 'commit', '-m', 'Update'])
     subprocess.call(['git', 'push'])
 
 def download_cards():
@@ -109,6 +109,10 @@ def download_cards():
         time.sleep(1)
 
     generate_url_list()
+    subprocess.call(['git', 'add', db_file])
+    subprocess.call(['git', 'commit', '-m', 'Update'])
+    subprocess.call(['git', 'push'])
+
     return True  # get new cards
 
 def redownload():
