@@ -51,7 +51,9 @@ def make_que(mode='daily', past=0):
     cards = list((id, v) for id, v in cards.items() if v['date'] in dates) # limit to cards in dates
     cards = sorted(cards, key=lambda x: x[1]['card_num']) # sort by card_num
     if mode == 'daily':
-        cards = cards[:4] # character cards only
+        num = len([card for card in cards if 'chara_name' in card[1].keys() and card[1]['chara_name'] != 'リボン'])
+        print(num)
+        cards = cards[:num] # character cards only
     
     # make que
     ques = deque([])
