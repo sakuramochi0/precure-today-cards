@@ -96,7 +96,13 @@ def download_cards():
                         'card_num': card_num,
                         'filename': filename[:-3] + 'png',
                         'img_url': img_url,
-                        'update_num': update_num}
+                        'update_num': update_num,
+                        # placeholders
+                        'chara_name': '',
+                        'card_name': '',
+                        'comment_name': '',
+                        'comment': '',
+            }
 
             id = '{}-{}-{}'.format(series, series_num, card_num)
             cards[id] = new_card

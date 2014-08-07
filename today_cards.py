@@ -3,7 +3,6 @@ import sys
 import signal
 import yaml
 import re
-import subprocess
 import time
 from os.path import basename
 from datetime import datetime, timedelta
@@ -20,6 +19,15 @@ db_file = 'cards.yml'
 que_file = 'ques.yml'
 cred_file = '.credentials'
 last_date_file = 'last_date.txt'
+
+CHARACTER = 'glassan'
+TEXT = {'ribbon': {'update': '更新されましたわ！',
+                   'thiscard': 'こちらのカード',
+                   'desu': 'ですわ！'},
+        'glassan':{'update': '更新されたぜ！',
+                   'thiscard': 'このカード',
+                   'desu': 'だぜ！'},
+        }
 
 sched = Scheduler()
 sched.start()
@@ -97,7 +105,7 @@ def download():
     '''Try download cards until updated and set weekly tweet'''
     get_new_card = download_cards()
     if get_new_card:
-        tweet('今日のカードが更新されましたわ！')
+        tweet('今日のカードが{}'.format(TEXT[CHARACTER]['update']))
         generator.make_que('weekly')  # set weekly tweet schedule
         now = datetime.now() + timedelta(minutes=10)
         for t in range(12):
@@ -199,9 +207,9 @@ def check_update():
                 text = get_img_alt(url)
                 if text:
                     title += ' ' + text
-            print('「{category}」のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
+            print('「{category}」のページが{text_update} / {title} - {url}'.format(category=category, title=title, url=url))
             try:
-                tweet('「{category}」のページが更新されましたわ！ / {title} - {url}'.format(category=category, title=title, url=url))
+                tweet('「{category}」のページが{text_update} / {title} - {url}'.format(category=category, title=title, url=url, text_update=TEXT[CHARACTER]['update']))
             except TwythonError as e:
                 print(e)
 
