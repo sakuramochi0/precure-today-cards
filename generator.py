@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 from collections import deque
 import yaml
+from today_cards import CHARACTER, TEXT
 
 db_file = 'cards.yml'
 que_file = 'ques.yml'
@@ -27,10 +28,10 @@ def tweet_generator(card_id, past, num):
         week = '{}週間前'.format(past)
 
     if 'comment' in card.keys() and card['comment']:
-        status = '{0}の{1}枚目の画像は、{2}の{3}ですわ！\n{4}「{5}」'.format(
-            week, num, card['chara_name'], card['card_name'], card['comment_name'], card['comment'])
+        status = '{0}の{1}枚目の画像は、{2}の{3}{desu}\n{4}「{5}」'.format(
+            week, num, card['chara_name'], card['card_name'], card['comment_name'], card['comment'], desu=TEXT[CHARACTER]['desu'])
     else:
-        status = '{0}の{1}枚目の画像は、こちらのカードですわ！'.format(week, num)
+        status = '{0}の{1}枚目の画像は、{thiscard}{desu}'.format(week, num, thiscard=TEXT[CHARACTER]['thiscard'], desu=TEXT[CHARACTER]['desu'])
 
     if 'uploaded_img_url' in card.keys() and card['uploaded_img_url']:
         uploaded_img_url = cards[card_id]['uploaded_img_url']
@@ -51,7 +52,7 @@ def make_que(mode='daily', past=0):
     cards = list((id, v) for id, v in cards.items() if v['date'] in dates) # limit to cards in dates
     cards = sorted(cards, key=lambda x: x[1]['card_num']) # sort by card_num
     if mode == 'daily':
-        num = len([card for card in cards if 'chara_name' in card[1].keys() and card[1]['chara_name'] != 'リボン'])
+        num = len([card for card in cards if 'chara_name' in card[1].keys() and card[1]['chara_name'] != 'リボン' and card[1]['chara_name'] != 'ぐらさん'])
         print(num)
         cards = cards[:num] # character cards only
     
