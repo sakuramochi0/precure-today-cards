@@ -105,7 +105,7 @@ def download():
     '''Try download cards until updated and set weekly tweet'''
     get_new_card = download_cards()
     if get_new_card:
-        tweet('今日のカードが{}'.format(TEXT[CHARACTER]['update']))
+        tweet('今日のカードが{update}'.format(update=TEXT[CHARACTER]['update']))
         generator.make_que('weekly')  # set weekly tweet schedule
         now = datetime.now() + timedelta(minutes=10)
         for t in range(12):
@@ -207,7 +207,7 @@ def check_update():
                 text = get_img_alt(url)
                 if text:
                     title += ' ' + text
-            print('「{category}」のページが{text_update} / {title} - {url}'.format(category=category, title=title, url=url))
+            print('「{category}」のページが{text_update} / {title} - {url}'.format(category=category, title=title, url=url, text_update=TEXT[CHARACTER]['update']))
             try:
                 tweet('「{category}」のページが{text_update} / {title} - {url}'.format(category=category, title=title, url=url, text_update=TEXT[CHARACTER]['update']))
             except TwythonError as e:

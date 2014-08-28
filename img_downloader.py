@@ -139,4 +139,6 @@ if __name__ == '__main__':
             db_file = 'test.csv'
         elif sys.argv[1] == 'redownload':
             redownload()
+        elif sys.argv[1] == 'download':
+            download_cards()
     download_cards()

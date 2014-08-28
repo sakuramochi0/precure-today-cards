@@ -1,5 +1,6 @@
 !!python/object/apply:collections.deque
-- - !!python/tuple [hapiness-3-85, 1, 1]
-  - !!python/tuple [hapiness-3-86, 1, 2]
-  - !!python/tuple [hapiness-3-87, 1, 3]
-  - !!python/tuple [hapiness-3-88, 1, 4]
+- - !!python/tuple [hapiness-4-29, 0, 2]
+  - !!python/tuple [hapiness-4-30, 0, 3]
+  - !!python/tuple [hapiness-4-31, 0, 4]
+  - !!python/tuple [hapiness-4-32, 0, 5]
+  - !!python/tuple [hapiness-4-33, 0, 6]
