@@ -1200,36 +1200,72 @@ hapiness-4-98: {card_name: '', card_num: 98, chara_name: '', comment: '', commen
 hapiness-4-99: {card_name: '', card_num: 99, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-02', filename: img_card_hapiness04-99_gspww9d2m783.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness04/09/img_card_hapiness04-99_gspww9d2m783.jpg',
   series: hapiness, series_num: 4, update_num: 09, uploaded_img_url: 'http://t.co/N9PlQ36xQM'}
-hapiness-5-1: {card_name: '', card_num: 1, chara_name: '', comment: '', comment_name: '',
-  date: '2014-10-16', filename: img_card_hapiness05-01_xphyibehmi6f.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-01_xphyibehmi6f.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+hapiness-5-1: {card_name: いぬのコーデ, card_num: 1, chara_name: あいだ マナ, comment: マロみたいにふわふわなコーデだね！,
+  comment_name: マナ, date: '2014-10-16', filename: img_card_hapiness05-01_xphyibehmi6f.png,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-01_xphyibehmi6f.jpg',
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/9WnIDd1016'}
 hapiness-5-10: {card_name: '', card_num: 10, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-10_n3magxefpguj.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-10_n3magxefpguj.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/uyfMzeZkZl'}
 hapiness-5-11: {card_name: '', card_num: 11, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-11_aireu3a9jpdr.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-11_aireu3a9jpdr.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
-hapiness-5-2: {card_name: '', card_num: 2, chara_name: '', comment: '', comment_name: '',
-  date: '2014-10-16', filename: img_card_hapiness05-02_yzctech8e5r5.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-02_yzctech8e5r5.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
-hapiness-5-3: {card_name: '', card_num: 3, chara_name: '', comment: '', comment_name: '',
-  date: '2014-10-16', filename: img_card_hapiness05-03_ffxdankhwygj.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-03_ffxdankhwygj.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/FBS4PtmKoQ'}
+hapiness-5-12: {card_name: '', card_num: 12, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-12_hy85g4cbuex7.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-12_hy85g4cbuex7.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-13: {card_name: '', card_num: 13, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-13_fxf3m5hsmyw2.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-13_fxf3m5hsmyw2.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-14: {card_name: '', card_num: 14, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-14_hi4kbzp4wsns.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-14_hi4kbzp4wsns.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-15: {card_name: '', card_num: 15, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-15_rgsygd7sknj5.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-15_rgsygd7sknj5.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-16: {card_name: '', card_num: 16, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-16_78zyfe6typ42.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-16_78zyfe6typ42.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-17: {card_name: '', card_num: 17, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-17_kmet5iaazask.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-17_kmet5iaazask.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-18: {card_name: '', card_num: 18, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-18_d4rmhmgc458p.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-18_d4rmhmgc458p.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-19: {card_name: '', card_num: 19, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-19_bc3ratri4x4y.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-19_bc3ratri4x4y.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-2: {card_name: いぬのコーデ, card_num: 2, chara_name: あいの めぐみ, comment: ひめ〜！
+    かくれてもにおいでわかるよ〜, comment_name: めぐみ, date: '2014-10-16', filename: img_card_hapiness05-02_yzctech8e5r5.png,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-02_yzctech8e5r5.jpg',
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/gPLpmkmkXe'}
+hapiness-5-20: {card_name: '', card_num: 20, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-20_yawchw3ja7if.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-20_yawchw3ja7if.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-21: {card_name: '', card_num: 21, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-21_hrn7cj4tx562.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-21_hrn7cj4tx562.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-22: {card_name: '', card_num: 22, chara_name: '', comment: '', comment_name: '',
+  date: '2014-10-23', filename: img_card_hapiness05-22_gmifwx9k36k4.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/02/img_card_hapiness05-22_gmifwx9k36k4.jpg',
+  series: hapiness, series_num: 5, update_num: '02'}
+hapiness-5-3: {card_name: オレンジのコーデ, card_num: 3, chara_name: みすみ なぎさ & ゆきしろ ほのか, comment: げんきいっぱい！
+    ジューシーなオレンジのコーデだよ！, comment_name: ほのか, date: '2014-10-16', filename: img_card_hapiness05-03_ffxdankhwygj.png,
+  img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-03_ffxdankhwygj.jpg',
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/KQRPTLLS96'}
 hapiness-5-4: {card_name: '', card_num: 4, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-04_yfgkxmyx8k2i.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-04_yfgkxmyx8k2i.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/vFhWRvs4NK'}
 hapiness-5-5: {card_name: '', card_num: 5, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-05_h9nukignftyz.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-05_h9nukignftyz.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/6XTT39QyTU'}
 hapiness-5-6: {card_name: '', card_num: 6, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-06_mdek2f5gy6bk.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-06_mdek2f5gy6bk.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/pCPR07bObU'}
 hapiness-5-7: {card_name: '', card_num: 7, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-07_kfsjpyrmzgni.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-07_kfsjpyrmzgni.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/9Le1egJ4hH'}
 hapiness-5-8: {card_name: '', card_num: 8, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-08_pmfkcybh2hdx.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-08_pmfkcybh2hdx.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/nxp7lsA5Gn'}
 hapiness-5-9: {card_name: '', card_num: 9, chara_name: '', comment: '', comment_name: '',
   date: '2014-10-16', filename: img_card_hapiness05-09_x9b9urmgzcwz.png, img_url: 'http://precure-live.com/allstars/image/precure-card/happiness05/01/img_card_hapiness05-09_x9b9urmgzcwz.jpg',
-  series: hapiness, series_num: 5, update_num: '01'}
+  series: hapiness, series_num: 5, update_num: '01', uploaded_img_url: 'http://t.co/CFeXyQoW3N'}
