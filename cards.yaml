@@ -5687,17 +5687,18 @@ hapiness-5-92:
   update_num: 08
   uploaded_img_url: http://t.co/IWqtEqjbgB
 hapiness-6-1:
-  card_name: ''
+  card_name: アイドルのコーデ
   card_num: 1
-  chara_name: ''
-  comment: ''
-  comment_name: ''
+  chara_name: めぐみ と ひめ
+  comment: ふたりでアイドルみたいにうたっておどってみたよ♪
+  comment_name: めぐみ
   date: '2014-12-11'
   filename: img_card_hapiness06-01_f8awd27ddxda.png
   img_url: http://precure-live.com/allstars/image/precure-card/happiness06/01/img_card_hapiness06-01_f8awd27ddxda.jpg
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/kj6LRmPOcV
 hapiness-6-10:
   card_name: ''
   card_num: 10
@@ -5710,6 +5711,7 @@ hapiness-6-10:
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/tRImBl7jls
 hapiness-6-11:
   card_name: ''
   card_num: 11
@@ -5722,6 +5724,7 @@ hapiness-6-11:
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/X3YkDeNt4R
 hapiness-6-12:
   card_name: ''
   card_num: 12
@@ -5734,66 +5737,216 @@ hapiness-6-12:
   series: hapiness
   series_num: 6
   update_num: '01'
-hapiness-6-2:
+  uploaded_img_url: http://t.co/WlpPPVoXhc
+hapiness-6-14:
   card_name: ''
-  card_num: 2
+  card_num: 14
   chara_name: ''
   comment: ''
   comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-14_r5gya18wujlx.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-14_r5gya18wujlx.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-15:
+  card_name: ''
+  card_num: 15
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-15_e4tcw69qzios.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-15_e4tcw69qzios.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-16:
+  card_name: ''
+  card_num: 16
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-16_t2yfe51unwvl.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-16_t2yfe51unwvl.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-17:
+  card_name: ''
+  card_num: 17
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-17_r7efs94hvqoa.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-17_r7efs94hvqoa.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-18:
+  card_name: ''
+  card_num: 18
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-18_q2cjt67boklz.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-18_q2cjt67boklz.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-19:
+  card_name: ''
+  card_num: 19
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-19_s1tmy08qhiex.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-19_s1tmy08qhiex.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-2:
+  card_name: アイドルのコーデ
+  card_num: 2
+  chara_name: まこと と うらら
+  comment: きょうもすてきなうたをみんなにとどけましょう〜♪
+  comment_name: まこと
   date: '2014-12-11'
   filename: img_card_hapiness06-02_tcrjhas6n2gm.png
   img_url: http://precure-live.com/allstars/image/precure-card/happiness06/01/img_card_hapiness06-02_tcrjhas6n2gm.jpg
   series: hapiness
   series_num: 6
   update_num: '01'
-hapiness-6-3:
+  uploaded_img_url: http://t.co/n0DdDUq0DC
+hapiness-6-20:
   card_name: ''
-  card_num: 3
+  card_num: 20
   chara_name: ''
   comment: ''
   comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-20_r8elu34ghiam.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-20_r8elu34ghiam.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-21:
+  card_name: ''
+  card_num: 21
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-21_d2tvj19sqioz.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-21_d2tvj19sqioz.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-23:
+  card_name: ''
+  card_num: 23
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-23_t7hvs82hjrok.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-23_t7hvs82hjrok.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-24:
+  card_name: ''
+  card_num: 24
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-24_b6jaw71yonqx.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-24_b6jaw71yonqx.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-25:
+  card_name: ''
+  card_num: 25
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-25_o7bwp60rqvjr.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-25_o7bwp60rqvjr.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-26:
+  card_name: ''
+  card_num: 26
+  chara_name: ''
+  comment: ''
+  comment_name: ''
+  date: '2014-12-18'
+  filename: img_card_hapiness06-26_v8hyk42rjows.png
+  img_url: http://precure-live.com/allstars/image/precure-card/happiness06/02/img_card_hapiness06-26_v8hyk42rjows.jpg
+  series: hapiness
+  series_num: 6
+  update_num: '02'
+hapiness-6-3:
+  card_name: キャンディストライプのコーデ
+  card_num: 3
+  chara_name: ゆきしろ ほのか
+  comment: ロリポップキャンディみたいでかわいいね♪
+  comment_name: ほのか
   date: '2014-12-11'
   filename: img_card_hapiness06-03_766abnhhbs2y.png
   img_url: http://precure-live.com/allstars/image/precure-card/happiness06/01/img_card_hapiness06-03_766abnhhbs2y.jpg
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/kkDUqpti81
 hapiness-6-4:
-  card_name: ''
+  card_name: キャンディストライプのコーデ
   card_num: 4
-  chara_name: ''
-  comment: ''
-  comment_name: ''
+  chara_name: きせ やよい
+  comment: おとぎばなしにでてきそうね♥
+  comment_name: やよい
   date: '2014-12-11'
   filename: img_card_hapiness06-04_3ueahp86ih7c.png
   img_url: http://precure-live.com/allstars/image/precure-card/happiness06/01/img_card_hapiness06-04_3ueahp86ih7c.jpg
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/jOyz6mFIyb
 hapiness-6-5:
-  card_name: ''
+  card_name: よるのもみじのコーデ
   card_num: 5
-  chara_name: ''
-  comment: ''
-  comment_name: ''
+  chara_name: ひかわ いおな
+  comment: よるにもみじがひらひらまっているみたい♪
+  comment_name: いおな
   date: '2014-12-11'
   filename: img_card_hapiness06-05_9micc9hrjdmu.png
   img_url: http://precure-live.com/allstars/image/precure-card/happiness06/01/img_card_hapiness06-05_9micc9hrjdmu.jpg
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/uEu8X1cIqG
 hapiness-6-6:
-  card_name: ''
+  card_name: よるのもみじのコーデ
   card_num: 6
-  chara_name: ''
-  comment: ''
-  comment_name: ''
+  chara_name: あおき れいか
+  comment: もみじのアクセントがとてもクールですね♪
+  comment_name: れいか
   date: '2014-12-11'
   filename: img_card_hapiness06-06_r9jipipgmifu.png
   img_url: http://precure-live.com/allstars/image/precure-card/happiness06/01/img_card_hapiness06-06_r9jipipgmifu.jpg
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/U1OqNzmMdv
 hapiness-6-7:
   card_name: ''
   card_num: 7
@@ -5806,6 +5959,7 @@ hapiness-6-7:
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/MDS5OxQGCI
 hapiness-6-8:
   card_name: ''
   card_num: 8
@@ -5818,6 +5972,7 @@ hapiness-6-8:
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/mFN7Qv6mWj
 hapiness-6-9:
   card_name: ''
   card_num: 9
@@ -5830,3 +5985,4 @@ hapiness-6-9:
   series: hapiness
   series_num: 6
   update_num: '01'
+  uploaded_img_url: http://t.co/XlxXdbwyQL
