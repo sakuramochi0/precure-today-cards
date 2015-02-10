@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 save_dir = 'img/'
 
 # construct filename dictionary
-filename_file = 'filename.yml'
+filename_file = 'filename.yaml'
 if path.exists(filename_file):
     with open(filename_file) as f:
         filename = yaml.load(f)

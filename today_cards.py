@@ -1,22 +1,29 @@
 #!/usr/bin/env python3
 import sys
 import signal
-import yaml
 import re
 import time
-from os.path import basename
-from datetime import datetime, timedelta
-from apscheduler.scheduler import Scheduler
-
+import datetime
+import yaml
+from io import BytesIO
+from collections import deque
+from os import path
 import requests
+import subprocess
+from apscheduler.scheduler import Scheduler
 from bs4 import BeautifulSoup
 from twython import Twython
 from twython import TwythonError
-from img_downloader import download_cards
-import generator
+from pymongo import Connection
+from PIL import Image
 
-db_file = 'cards.yml'
-que_file = 'ques.yml'
+URL_LIST = 'url-list.txt'
+
+url_prefix = 'http://precure-live.com/allstars/'
+page_url = url_prefix + 'precure-card/today-card.html'
+headers = {'referer': url_prefix + 'index.html'}
+
+que_file = 'ques.yaml'
 cred_file = '.credentials'
 last_date_file = 'last_date.txt'
 
@@ -29,6 +36,9 @@ TEXT = {'ribbon': {'update': '更新されましたわ！',
                    'desu': 'だぜ！'},
         }
 
+que_file = 'ques.yaml'
+cards = Connection().precure_dcd_today_card.cards
+
 sched = Scheduler()
 sched.start()
 
@@ -38,21 +48,9 @@ def auth():
     '''
     # read app credentials
     with open(cred_file) as f:
-        app_key, app_secret, oauth_token, oauth_secret = \
-                            [x.strip() for x in f]
+        app_key, app_secret, oauth_token, oauth_secret = [x.strip() for x in f]
     t = Twython(app_key, app_secret, oauth_token, oauth_secret)
     return t
-
-def get_timeline(user_id='precure_cards'):
-    '''
-    get twitter home timeline of the specific user
-    '''
-    t = auth()
-    print('user_id: ', user_id)
-    timeline = t.statuses.user_timeline(id=user_id)
-
-    for line in timeline[:5]:
-        print('{0[created_at]} {0[user][name]}({0[user][screen_name]}) {0[text]}'.format(line))
 
 def tweet(status='', img_path=None):
     '''tweet a status text'''
@@ -70,77 +68,40 @@ def run(mode='daily'):
     with open(que_file) as q:
         ques = yaml.load(q)
     if len(ques) == 0:
-        generator.make_que(mode)
+        make_que(mode)
         with open(que_file) as q:
             ques = yaml.load(q)
         if len(ques) == 0: # on Thursday and yet get new cards
-            generator.make_que(mode, past=1)
+            make_que(mode, past=1)
 
     que = ques.popleft()
 
     # tweet
-    status = generator.tweet_generator(*que)
+    status = tweet_generator(*que)
     res = tweet(**status)
-    with open(db_file) as f:
-        cards = yaml.load(f)
-    print('Tweet this card:', cards[que[0]])
     print('Remained ques:', ques)
 
     # update db
-    card_id = que[0]
-    try:
-        with open(db_file) as db:
-            cards = yaml.load(db)
-        cards[card_id]['uploaded_img_url'] = res['entities']['media'][0]['url']
-    except:
-        pass
-    with open(db_file, 'w') as db:
-        yaml.dump(cards, db, allow_unicode=True)
+    id = que[0]
+    img_url = res['entities']['media'][0]['url']
+    cards.update({'_id': id}, {'$set': {'img_url_twitter': img_url}})
 
     # update que_file
     with open(que_file, 'w') as q:
-        yaml.dump(ques, q, allow_unicode=True)
+        yaml.dump(ques, q, allow_unicode=True, default_flow_style=False)
 
 def download():
     '''Try download cards until updated and set weekly tweet'''
     get_new_card = download_cards()
     if get_new_card:
         tweet('今日のカードが{update}'.format(update=TEXT[CHARACTER]['update']))
-        generator.make_que('weekly')  # set weekly tweet schedule
-        now = datetime.now() + timedelta(minutes=10)
+        make_que('weekly')  # set weekly tweet schedule
+        now = datetime.datetime.now() + datetime.timedelta(minutes=10)
         for t in range(12):
             # run('weekly') 12 times every 5 minutes
-            sched.add_date_job(run, now + timedelta(minutes=t), args=['weekly']) 
+            sched.add_date_job(run, now + datetime.timedelta(minutes=t), args=['weekly']) 
         sched.print_jobs()
         time.sleep(60 * 60) # sleep 1hour
-
-def clear_uploaded_img_url():
-    '''Clear img_url to re-upload image files.'''
-    with open(db_file) as db:
-        cards = yaml.load(db)
-    for card_id, card in cards.items():
-        cards[card_id]['uploaded_img_url'] = False
-    with open(db_file, 'w') as db:
-        yaml.dump(cards, db, allow_unicode=True)
-        
-def set_schedule():
-    '''Set daily and weekly schedules.'''
-    if test:
-        chara_card_num = 6      # sometimes become 6
-        for t in range(chara_card_num):
-            now = datetime.now()
-            sched.add_date_job(run, now + timedelta(seconds=t*5+10), args=['daily'])
-    if quick:
-        for t in range(12):
-            now = datetime.now()
-            sched.add_date_job(run, now + timedelta(seconds=t*10+10), args=['weekly'])
-    if weekly:
-        for t in range(11):
-            now = datetime.now()
-            # run('weekly') 12 times every 5 minutes
-            sched.add_date_job(run, now + timedelta(minutes=t*5, seconds=10), args=['weekly']) 
-    sched.print_jobs()
-    signal.pause()  # not to let program exit
 
 def get_title(url):
     '''get the first part of the page title from the url'''
@@ -152,7 +113,10 @@ def get_title(url):
     if match:
         title = match.group(1)
     else:
-        title = re.search(r'(.+) : ', title).group(1)
+        print(title)
+        match = re.search(r'(.+) : ', title)
+        if match:
+            title = match.group(1)
     return title
 
 def get_img_alt(url):
@@ -183,7 +147,7 @@ def check_update():
     # date check
     with open(last_date_file) as f:
         last_date = f.read().strip()
-    new_date = [x for x in soup(id='precure-news')[0]('dt') if x.span][0].next
+    new_date = [i for i in soup.select('#precure-news dt') if i.span][0].next
     if new_date != last_date:
         for i in news:
             cls = i['class'][0]
@@ -216,49 +180,184 @@ def check_update():
         with open(last_date_file, 'w') as f:
             f.write(new_date)
 
+def tweet_generator(id, past, num):
+    '''Generate tweet text from db.'''
+    print('-' * 8)
+    card = cards.find({'_id': id})
+
+    # name of the week
+    if past == 0:
+        week = '今週'
+    elif past == 1:
+        week = '先週'
+    else:
+        week = '{}週間前'.format(past)
+
+    if 'comment' in card.keys() and card['comment']:
+        status = '{0}の{1}枚目の画像は、{2}の{3}{desu}\n{4}「{5}」'.format(
+            week,
+            num,
+            card['chara_name'],
+            card['card_name'],
+            card['comment_name'],
+            card['comment'],
+            desu=TEXT[CHARACTER]['desu']
+        )
+    else:
+        status = '{0}の{1}枚目の画像は、{thiscard}{desu}'.format(
+            week,
+            num,
+            thiscard=TEXT[CHARACTER]['thiscard'],
+            desu=TEXT[CHARACTER]['desu']
+        )
+
+    if card['img_url_twitter']:
+        status += ' ' + card['img_url_twitter']
+        return {'status': status}
+
+    else:
+        img_path = 'img/' + card['filename']
+        return {'status': status, 'img_path': img_path}
+            
+def make_que(mode='daily', past=0):
+    '''
+    Make tweet que according to mode (weekly/daily).
+    If 'past' is given, return a list 'past' weeks ago.
+    '''
+    # read db and limit cards to in this week
+    a_week_ago = datetime.datetime.now() - datetime.timedelta(7)
+    cards_in_week = cards.find({'date': {'$gt': a_week_ago}, 'chara': {'$ne': ''}}).sort('_id')
+
+    if not cards:
+        return
+    elif mode == 'daily':
+        # もし、データが未入力らしければ
+        if not cards_in_week.count():
+            cards_in_week = cards.find({'date': {'$gt': a_week_ago}}).sort('_id').limit(4)
+    
+    # make que
+    ques = deque([])
+    for i, card in enumerate(cards_in_week, 1):
+        que = (card['id'], past, i)
+        ques.append(que)
+
+    # write que
+    with open(que_file, 'w') as f:
+        yaml.dump(ques, f)
+
+def generate_url_list():
+    urls = sorted(cards.find().distinct('img_url'))
+    with open(URL_LIST, 'w') as f:
+        f.write('\n'.join(urls))
+    # update repo
+    subprocess.call(['git', 'add', URL_LIST])
+    subprocess.call(['git', 'commit', '-m', 'Update'])
+    subprocess.call(['git', 'push'])
+
+def download_cards():
+    '''download all card image of the week'''
+    max_card_num = 13
+    downloaded_list = []        # appended downloaded card_num
+    retry = 0
+
+    exist_filenames = cares
+
+    # download all the card
+    while len(downloaded_list) < max_card_num:
+        retry += 1
+        if retry > 300:
+            print('- over 300 retry, exit')
+            break
+            
+        # get html
+        r = requests.get(page_url, headers=headers)
+
+        # parse html & get img_url
+        regex = re.compile(r'image/precure-card/[^/]+/([^/]+)/([^"]+)')
+        match = re.search(regex, r.text)
+        update_num = match.group(1)
+        img_url = url_prefix + match.group()
+        filename = match.group(2)
+
+        # cf. filename: 'img_card_happiness01-68_e8d7824dxjm3.jpg'
+        regex = re.compile(r'img_card_(.+)(\d{2,})-(\d{2,})_(.+).jpg')
+        match = re.search(regex, filename)
+        series = match.group(1)
+        series_num = int(match.group(2))
+        card_num = int(match.group(3))
+        id = '{}-{}-{}'.format(series, series_num, card_num)
+        date = datetime.date.today()
+
+        # prevent duplicated download
+        if cards.find({'filename': filename}).count():
+            return False # not get new cards
+        
+        # check if the card is new or not
+        if not card_num in downloaded_list:
+            print('- get a new card #', len(downloaded_list) + 1)
+            # get img
+            r = requests.get(img_url, headers=headers)
+            with open('img/jpg/' + filename, 'wb') as f:
+                f.write(r.content)
+            print('- save jpeg image:', filename)
+
+            # convert to png image
+            img = Image.open(BytesIO(r_img.content))
+            img.save('img/' + path.splitext(filename)[0] + 'png')
+            
+            downloaded_list.append(card_num)
+            print('- add downloaded_list:', id)
+
+            new_card = {
+                '_id': id,
+                'date': date,
+                'series': series,
+                'series_num': series_num,
+                'card_num': card_num,
+                'filename': filename,
+                'img_url': img_url,
+                'update_num': update_num,
+                # placeholders
+                'chara': '',
+                'coode': '',
+                'comment_chara': '',
+                'comment': '',
+            }            
+            cards.update({'_id': id}, {'$set': new_card}, upsert=True)
+
+            print('Append a record to the database:', id)
+            print('-' * 8)
+                            
+        # safe access
+        time.sleep(1)
+
+    generate_url_list()
+
+    return True  # get new cards
+
+def redownload():
+    '''re-download all the images'''
+    for card in cards.find():
+        img_url = card['img_url']
+        filename = card['filename']
+        r = requests.get(img_url, headers=headers)
+        with open('img/' + filename, 'wb') as f:
+            f.write(r.content)
+        print('Write image:', filename)
+
 if __name__ == '__main__':
     
-    docs = '''\
-Usage:
-  {0} [test] [quick] <command> <arguments>
-command:
-  run                     Run que tweet.
-  set_schedule            Run scheduler.
-  clear		          Crear all the uploaded_img_url from database.
-  make_que [weekly]       Make ques.yaml for daily[weekly] tweets.
-  tweet <args>            Tweet <args> text.
-  timeline <args>         Show home timeline.
-  img <img> <args>        Tweet <args> text with <img> image file.
-  check_update            Check website update.'''.format(basename(sys.argv[0]))
-    
-    test = False
-    quick = False
     weekly = False
     args = sys.argv[1:]
-    if len(args) < 1:
-        print(docs)
-        exit()
-    elif args[0] == 'test':
-        test = True
-        cred_file = '.credentials_for_test'
-        args.pop(0)
-    elif args[0] == 'quick':
-        quick = True
-        args.pop(0)
-    elif args[0] == 'weekly':
+
+    if args[0] == 'weekly':
         weekly = True
         args.pop(0)
 
-    if len(args) < 1:
-        print(docs)
-    elif args[0] == 'tweet':
+    if args[0] == 'tweet':
         tweet(status=args[1:])
         if args[1] == 'img':
             tweet(status=args[2:],img_path=args[1])
-    elif args[0] == 'timeline':
-        get_timeline()
-    elif args[0] == 'clear':
-        clear_uploaded_img_url()
     elif args[0] == 'make_que':
         mode = 'daily'
         past = 0
@@ -270,8 +369,6 @@ command:
             elif args[1] == 'daily':
                 mode = 'daily'
         generator.make_que(mode, past)
-    elif args[0] == 'set_schedule':
-        set_schedule()
     elif args[0] == 'download':
         download()
     elif args[0] == 'check_update':

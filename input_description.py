@@ -5,7 +5,7 @@ import yaml
 import easygui as eg
 
 img_dir = 'img/'
-db_file = 'cards.yml'
+db_file = 'cards.yaml'
 
 with open(db_file) as db:
     cards = yaml.load(db)
