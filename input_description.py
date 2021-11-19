@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
 # input_description.py - help to input insufficient infomation in the card db
 from PIL import Image
-import yaml
+import pandas as pd
 import easygui as eg
 
 img_dir = 'img/'
-db_file = 'cards.yaml'
+db_file = 'cards.csv'
 
-with open(db_file) as db:
-    cards = yaml.load(db)
-cs = cards # avoid from RuntimeError: dictionary changed size during iteration
-for id, card in cs.items():
-    if not (('chara_name' in card.keys()) and ('card_name' in card.keys()) \
-            and ('comment_name' in card.keys()) and ('comment' in card.keys())):
-        filename = card['filename']
+cards = pd.read_csv(db_file)
+for card in cards.iterrows():
+    c = card[1]
+    if str(c['chara_name']) == 'nan': # if comment is empty
+        filename = c['filename']
         img = Image.open(img_dir + filename)
         img.show()
-        msg = 'カードのデータを入力してね♪'
+        msg = 'カードのデータを入力してね'
         title = 'カードデータの入力'
-        field_names = ['キャラクター', 'なまえ', 'カード名', 'コメント']
+        field_names = ['カードのキャラクター',
+                       'カードの名前',
+                       'コメントを言っているキャラクター',
+                       'コメント']
         field_values = []
         field_values = eg.multenterbox(msg, title, field_names)
-        chara_name, comment_name, card_name, comment = field_values[:]
+        chara_name, card_name, comment_name, comment = field_values[:]
         if not chara_name:
             chara_name = 'リボン'
-        cards[id]['chara_name'] = chara_name
-        cards[id]['card_name'] = card_name
-        cards[id]['comment_name'] = comment_name
-        cards[id]['comment'] = comment
-        print('write: {}'.format(field_values[:]))
-        with open(db_file, 'w') as db:
-            yaml.dump(cards, db, allow_unicode=True)
+            
+        cards.loc[cards['filename'] == filename, 'chara_name'] = chara_name
+        cards.loc[cards['filename'] == filename, 'card_name'] = card_name
+        cards.loc[cards['filename'] == filename, 'comment_name'] = comment_name
+        cards.loc[cards['filename'] == filename, 'comment'] = comment
+        cards.to_csv(db_file, index=False)
